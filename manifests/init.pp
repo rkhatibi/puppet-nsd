@@ -23,6 +23,10 @@ class nsd (
   contain nsd::config
   include nsd::service
 
+  Class['nsd::install']
+  -> Class['nsd::config']
+  ~> Class['nsd::service']
+
   exec { 'nsd-control-setup':
     command => 'nsd-control-setup',
     creates => "${config_d}/nsd_control.pem",
