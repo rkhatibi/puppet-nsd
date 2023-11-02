@@ -9,46 +9,19 @@ class nsd (
   Variant[String,Undef] $package_name,
   String $control_cmd,
   String $zonedir,
-  Boolean $zonepurge, # purge of unmanaged zone files
+  Boolean $zonepurge = false,
   String $group,
   String $owner,
   String $database,
-  Integer $verbosity                    = 0,
-  Integer $port                         = 53,
+  Integer $verbosity = 0,
+  Integer $port = 53,
   Array[Stdlib::Ip::Address] $interface = ['::0','0.0.0.0'],
-  Optional[String] $logfile             = undef,
+  Optional[String] $logfile = undef,
 ) {
-  if $package_name {
-    package { $package_name:
-      ensure => installed,
-      before => [
-        Concat[$config_file],
-        Service[$service_name],
-      ],
-    }
-  }
 
-  service { $service_name:
-    ensure  => running,
-    name    => $service_name,
-    enable  => true,
-    require => [
-      Concat[$config_file],
-    ],
-  }
-
-  concat { $config_file:
-    owner  => 'root',
-    group  => $group,
-    mode   => '0640',
-    notify => Service[$service_name],
-  }
-
-  concat::fragment { 'nsd-header':
-    order   => '00',
-    target  => $config_file,
-    content => template('nsd/nsd.conf.erb'),
-  }
+  contain nsd::install
+  contain nsd::config
+  include nsd::service
 
   exec { 'nsd-control-setup':
     command => 'nsd-control-setup',
@@ -58,21 +31,13 @@ class nsd (
   exec { 'nsd-control reload':
     command     => 'nsd-control reload',
     refreshonly => true,
-    require     => Service[$service_name],
+    require     => Class['nsd::service'],
   }
 
   exec { 'nsd-control reconfig':
     command     => 'nsd-control reconfig',
     refreshonly => true,
-    require     => Service[$service_name],
+    require     => Class['nsd::service'],
   }
 
-  file { $zonedir:
-    ensure  => directory,
-    owner   => 'root',
-    group   => $group,
-    mode    => '0750',
-    purge   => $zonepurge,
-    recurse => true,
-  }
 }
