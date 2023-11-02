@@ -20,4 +20,10 @@ class nsd::config {
     purge   => $nsd::zonepurge,
     recurse => true,
   }
+
+  exec { 'nsd-control-setup':
+    command => 'nsd-control-setup',
+    creates => "${config_d}/nsd_control.pem",
+  }
+
 }

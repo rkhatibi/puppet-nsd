@@ -4,17 +4,18 @@
 #
 class nsd (
   Stdlib::Absolutepath $config_d,
-  String $config_file,
-  String $control_cmd,
-  String $database,
+  String[1] $config_file,
+  String[1] $control_cmd,
+  String[1] $database,
   Stdlib::Absolutepath $zonedir,
-  String $group = 'nsd',
+  String[1] $group = 'nsd',
   Array[Stdlib::Ip::Address] $interface = ['::0','0.0.0.0'],
   Optional[String] $logfile = undef,
-  String $owner = 'nsd',
+  String[1] $owner = 'nsd',
   Variant[String,Undef] $package_name = 'nsd',
   Stdlib::Port $port = 53,
-  String $service_name = 'nsd',
+  String[1] $service_name = 'nsd',
+  Boolean $service_reload = false,
   Integer $verbosity = 0,
   Boolean $zonepurge = false,
 ) {
@@ -26,22 +27,6 @@ class nsd (
   Class['nsd::install']
   -> Class['nsd::config']
   ~> Class['nsd::service']
-
-  exec { 'nsd-control-setup':
-    command => 'nsd-control-setup',
-    creates => "${config_d}/nsd_control.pem",
-  }
-
-  exec { 'nsd-control reload':
-    command     => 'nsd-control reload',
-    refreshonly => true,
-    require     => Class['nsd::service'],
-  }
-
-  exec { 'nsd-control reconfig':
-    command     => 'nsd-control reconfig',
-    refreshonly => true,
-    require     => Class['nsd::service'],
-  }
+  -> Class['nsd::restart']
 
 }

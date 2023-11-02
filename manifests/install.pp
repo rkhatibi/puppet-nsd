@@ -1,8 +1,10 @@
 class nsd::install {
 
-  package { 'nsd':
-    ensure => installed,
-    name   => $package_name,
+  if $nsd::package_name {
+    package { 'nsd':
+      ensure => installed,
+      name   => $package_name,
+    }
   }
 
 }
