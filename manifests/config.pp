@@ -13,7 +13,7 @@ class nsd::config {
     content => epp('nsd/nsd.conf', {
       'database'  => $nsd::database,
       'interface' => $nsd::interface,
-      'logile'    => $nsd::logfile,
+      'logfile'   => $nsd::logfile,
       'port'      => $nsd::port,
       'verbosity' => $nsd::verbosity,
     }),
