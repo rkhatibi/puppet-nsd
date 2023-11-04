@@ -1,0 +1,12 @@
+server:
+  hide-version: yes
+  verbosity: <%= $verbosity %>
+  database: "<%= $database %>"
+<% if $interface =~ Array -%>
+<% $interface.each do |int| -%><%= "  ip-address: #{int}\n" %><% end -%>
+<% elsif $interface =~ String -%><%=   "  ip-address: #{@interface}" %>
+<% end -%>
+  port: <%= $port %>
+<% if $logfile -%>
+  logfile: "<%= $logfile %>"
+<% end -%>
