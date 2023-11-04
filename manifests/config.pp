@@ -10,7 +10,13 @@ class nsd::config {
   concat::fragment { 'nsd-header':
     order   => '00',
     target  => $nsd::config_file,
-    content => template('nsd/nsd.conf.erb'),
+    content => epp('nsd/nsd.conf', {
+      'database'  => $nsd::database,
+      'interface' => $nsd::interface,
+      'logile'    => $nsd::logfile,
+      'port'      => $nsd::port,
+      'verbosity' => $nsd::verbosity,
+    }),
   }
 
   file { $nsd::zonedir:
