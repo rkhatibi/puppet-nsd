@@ -2,22 +2,22 @@
 #
 define nsd::zone (
   String $template,
-  Hash $vars = {},
-  String $zone = $name,
+  String[1] $zone = $name,
+  Hash $zonedata = {},
   Enum['epp','hiera'] $func = 'epp',
 ) {
 
   include nsd
 
-  $config_file = $nsd::config_file
-  $owner       = $nsd::owner
-  $zonedir     = $nsd::zonedir
-  $zonefile    = "${zone}.zone"
-
   concat::fragment { "nsd-zone-${zone}":
     order   => '05',
     target  => $config_file,
-    content => template('nsd/zone.erb'),
+    content => epp('nsd/zone', {
+      'config_file' => $nsd::config_file,
+      'owner'       => $nsd::owner,
+      'zonedir'     => $nsd::zonedir,
+      'zonefile'    => "${zone}.zone",
+    }),
   }
 
   file { "${zonedir}/${zonefile}":
@@ -29,7 +29,7 @@ define nsd::zone (
   }
 
   exec { "nsd-control reload ${zone}":
-    command     => "nsd-control reload ${zone}",
+    command     => "${nsd::control_cmd} reload ${zone}",
     refreshonly => true,
     require     => Class['nsd::service'],
   }
