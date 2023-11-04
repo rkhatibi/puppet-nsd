@@ -18,6 +18,5 @@ class nsd::remote (
   concat::fragment { 'nsd-remote':
     order   => '10',
     target  => $config_file,
-    content => template('nsd/remote.erb'),
-  }
+    content => epp('nsd/remote'),
 }
