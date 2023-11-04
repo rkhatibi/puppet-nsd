@@ -4,9 +4,10 @@
 #
 class nsd (
   Stdlib::Absolutepath $config_d,
-  String[1] $config_file,
-  String[1] $control_cmd,
-  String[1] $database,
+  Stdlib::Absolutepath $config_file,
+  Stdlib::Absolutepath $control_cmd,
+  Stdlib::Absolutepath $control_setup_cmd,
+  Stdlib::Absolutepath $database,
   Stdlib::Absolutepath $zonedir,
   String[1] $group = 'nsd',
   Array[Stdlib::Ip::Address] $interface = ['::0','0.0.0.0'],
