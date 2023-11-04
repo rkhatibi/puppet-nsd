@@ -2,47 +2,35 @@
 #
 define nsd::zone (
   String $template,
-  Hash $vars       = {},
-  $templatestorage = 'puppet',
+  Hash $vars = {},
+  String $zone = $name,
+  Enum['epp','hiera'] $func = 'epp',
 ) {
+
   include nsd
 
   $config_file = $nsd::config_file
   $owner       = $nsd::owner
   $zonedir     = $nsd::zonedir
-  $zonefile    = "${name}.zone"
+  $zonefile    = "${zone}.zone"
 
-  concat::fragment { "nsd-zone-${name}":
+  concat::fragment { "nsd-zone-${zone}":
     order   => '05',
     target  => $config_file,
     content => template('nsd/zone.erb'),
   }
 
-  case $templatestorage {
-    'puppet': {
-      file { "${zonedir}/${zonefile}":
-        owner   => $owner,
-        group   => '0',
-        mode    => '0640',
-        content => template($template),
-        notify  => Exec["nsd-control reload ${name}"],
-      }
-    }
-    'hiera': {
-      file { "${zonedir}/${zonefile}":
-        owner   => $owner,
-        group   => '0',
-        mode    => '0640',
-        content => hiera($template),
-        notify  => Exec["nsd-control reload ${name}"],
-      }
-    }
-    default: { fail('templatestorage must be either \'puppet\' or \'hiera\'') }
+  file { "${zonedir}/${zonefile}":
+    owner   => $owner,
+    group   => '0',
+    mode    => '0640',
+    content => call($func, $template),
+    notify  => Exec["nsd-control reload ${zone}"],
   }
 
-  exec { "nsd-control reload ${name}":
-    command     => "nsd-control reload ${name}",
+  exec { "nsd-control reload ${zone}":
+    command     => "nsd-control reload ${zone}",
     refreshonly => true,
-    require     => [Concat[$config_file], Service[$nsd::service_name],],
+    require     => Class['nsd::service'],
   }
 }

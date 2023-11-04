@@ -1,3 +1,4 @@
+# control class
 class nsd::control {
 
   exec { 'nsd-control reconfig':

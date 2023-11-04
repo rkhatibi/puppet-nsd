@@ -1,9 +1,10 @@
+# config class
 class nsd::config {
 
   concat { $nsd::config_file:
-    owner  => 'root',
-    group  => $nsd::group,
-    mode   => '0640',
+    owner => 'root',
+    group => $nsd::group,
+    mode  => '0640',
   }
 
   concat::fragment { 'nsd-header':
@@ -23,7 +24,7 @@ class nsd::config {
 
   exec { 'nsd-control-setup':
     command => 'nsd-control-setup',
-    creates => "${config_d}/nsd_control.pem",
+    creates => "${nsd::config_d}/nsd_control.pem",
   }
 
 }

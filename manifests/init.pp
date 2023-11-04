@@ -27,6 +27,5 @@ class nsd (
   Class['nsd::install']
   -> Class['nsd::config']
   ~> Class['nsd::service']
-  -> Class['nsd::restart']
 
 }
