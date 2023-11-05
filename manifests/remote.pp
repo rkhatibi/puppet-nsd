@@ -17,7 +17,15 @@ class nsd::remote (
   concat::fragment { 'nsd-remote':
     order   => '10',
     target  => $nsd::config_file,
-    content => epp('nsd/remote'),
+    content => epp('nsd/remote', {
+      'enable'            => $enable,
+      'interface'         => $interface,
+      'port'              => $port,
+      'server_key_file'   => $server_key_file,
+      'server_cert_file'  => $sserver_cert_file,
+      'control_key_file'  => $control_key_file,
+      'control_cert_file' => $control_cert_file,
+    }),
   }
 
 }
