@@ -22,7 +22,7 @@ class nsd::remote (
       'interface'         => $interface,
       'port'              => $port,
       'server_key_file'   => $server_key_file,
-      'server_cert_file'  => $sserver_cert_file,
+      'server_cert_file'  => $server_cert_file,
       'control_key_file'  => $control_key_file,
       'control_cert_file' => $control_cert_file,
     }),
