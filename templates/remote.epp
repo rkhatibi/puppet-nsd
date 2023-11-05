@@ -1,5 +1,5 @@
 remote-control:
-  control-enable: <%= str2bool($enable, 'yes', 'no') %>
+  control-enable: <%= bool2str($enable, 'yes', 'no') %>
 <% if $interface =~ Array { -%>
 <% $interface.each |$int| { -%>
   control-interface: <%= $int %>
