@@ -21,6 +21,7 @@ define nsd::zone (
   }
 
   file { "${zonedir}/${zonefile}":
+    ensure  => file,
     owner   => $owner,
     group   => '0',
     mode    => '0640',
