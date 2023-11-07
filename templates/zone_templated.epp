@@ -9,7 +9,7 @@ $TTL <%= $zonedata['ttl'] %>
 )
 
 <% $zonedata['ns'].each |String $server, Stdlib::IP::Address $ip | { -%>
-  IN NS <%= $server %>.<%= zone %>.
+  IN NS <%= $server %>.<%= $zone %>.
 <% } -%>
   IN MX 10 <%= $zonedata['mx'] %>.
 @ IN A <%= $zonedata['default'] %>
