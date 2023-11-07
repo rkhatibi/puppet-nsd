@@ -25,6 +25,7 @@ define nsd::zone_templated(
     group   => $nsd::group,
     mode    => '0640',
     content => epp('nsd/zone_templated', {
+      'zone'     => $zone,
       'zonedata' => $zonedata,
     }),
   }
