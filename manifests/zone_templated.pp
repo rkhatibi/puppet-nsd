@@ -2,7 +2,7 @@
 #
 define nsd::zone_templated(
   String[1] $zone = $name,
-  Hash $zonedata = {}.
+  Hash $zonedata = {},
 ) {
 
   # not sure this needs to be there
@@ -10,7 +10,7 @@ define nsd::zone_templated(
 
   concat::fragment { "nsd-zone-${zone}":
     order   => '05',
-    target  => $config_file,
+    target  => $nsd::config_file,
     content => epp('nsd/zone', {
       'config_file' => $nsd::config_file,
       'owner'       => $nsd::owner,
@@ -19,7 +19,7 @@ define nsd::zone_templated(
     }),
   }
 
-  file { "${zonedir}/${zonefile}":
+  file { "${nsd::zonedir}/${nsd::zonefile}":
     ensure  => file,
     owner   => 'root',
     group   => $nsd::group,
