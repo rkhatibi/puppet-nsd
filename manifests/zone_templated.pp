@@ -19,7 +19,7 @@ define nsd::zone_templated(
     }),
   }
 
-  file { "${nsd::zonedir}/${nsd::zonefile}":
+  file { "${nsd::zonedir}/${zone}":
     ensure  => file,
     owner   => 'root',
     group   => $nsd::group,
