@@ -2,7 +2,7 @@
 #
 define nsd::zone_templated(
   String[1] $zone = $name,
-  Hash $zone_data = {}.
+  Hash $zonedata = {}.
 ) {
 
   # not sure this needs to be there
@@ -24,7 +24,9 @@ define nsd::zone_templated(
     owner   => 'root',
     group   => $nsd::group,
     mode    => '0640',
-    content => epp('nsd/zone_templated', {} ),
+    content => epp('nsd/zone_templated', {
+      'zonedata' => $zonedata,
+    }),
   }
 
 

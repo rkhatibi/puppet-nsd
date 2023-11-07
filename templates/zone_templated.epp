@@ -1,0 +1,22 @@
+$TTL <%- $zonedata[ttl] %>
+; <%- $zone %>
+@ IN SOA ns01.<%- $zone %>. hostmaster.<%- $zone %>. (
+  <%- $zonedata[serial] %> ; serial
+  12h ; refresh
+  1h ; retry
+  3w ; expire
+  1h ; minimum
+)
+
+<% $zonedata[ns].each |String $server, Stdlib::Ipaddress $ip | { -%>
+  IN NS <%- $ns %>
+<% } -%>
+  IN MX 10 <% $zonedata[mx] %>
+@ IN A <% $zonedata[default] %>
+
+; host records
+localhost IN A 127.0.0.1
+
+<% $zonedata[ns].each |String $server, Stdlib::IP::Address $ip | { -%>
+<% $server %> IN A <%- $ip %>
+<% } -%>
