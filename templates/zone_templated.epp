@@ -9,14 +9,18 @@ $TTL <%= $zonedata['ttl'] %>
 )
 
 <% $zonedata['ns'].each |String $server, Stdlib::IP::Address $ip | { -%>
-  IN NS <%= $server %>.<%= $zone %>.
+  NS <%= $server %>.<%= $zone %>.
 <% } -%>
-  IN MX 10 <%= $zonedata['mx'] %>.
-@ IN A <%= $zonedata['default'] %>
+<% if $zonedata['mx'] { -%>
+  MX 10 <%= $zonedata['mx'] %>.
+<% } -%>
+<% if $zonedata['default'] { -%>
+@ A <%= $zonedata['default'] %>
+<% } -%>
 
 ; host records
 localhost IN A 127.0.0.1
 
 <% $zonedata['ns'].each |String $server, Stdlib::IP::Address $ip | { -%>
-<%= $server %> IN A <%= $ip %>
+<%= $server %> A <%= $ip %>
 <% } -%>
